@@ -14,7 +14,7 @@ Handling conditional requests by the server is beyond the scope of this caching 
 
 Only the first from the list below has it's own HTTP =response header field, all others, when used, will be appended to the HTTP Cache-Control response header field. Some of those take parameters.
 
-### http_cache_expire
+### http_cache_expires
 
 ### http_cache_must_revalidate
 
