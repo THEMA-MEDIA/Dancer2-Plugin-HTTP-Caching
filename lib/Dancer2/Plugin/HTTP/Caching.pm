@@ -8,7 +8,7 @@ use Dancer2::Plugin;
 
 use HTTP::Date;
 
-register http_cache_expires => sub {
+register http_expire => sub {
     my $dsl         = shift;
     my $arg         = shift; # HTTP Date formatted string
     
@@ -19,5 +19,12 @@ register http_cache_expires => sub {
     
     return;
 };
+
+on_plugin_import {
+    my $dsl = shift;
+    my $app = $dsl->app;
+};
+
+register_plugin;
 
 1;
