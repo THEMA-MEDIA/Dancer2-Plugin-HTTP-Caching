@@ -9,14 +9,10 @@ use Dancer2::Plugin;
 use HTTP::Date;
 
 register http_expire => sub {
-    my $dsl         = shift;
-    my $arg         = shift; # HTTP Date formatted string
-    
-    carp "Missing date for HTTP Header-Field 'Expire'"
-        unless $arg;
-    
-    $dsl->header('Expires' => $arg);
-    
+    $_[0]->log( warning =>
+        "Missing date for HTTP Header-Field 'Expire'" )
+        unless  $_[1];
+    $_[0]->header('Expires' => $_[1]);
     return;
 };
 
