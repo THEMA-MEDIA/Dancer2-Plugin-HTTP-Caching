@@ -20,6 +20,19 @@ register http_expire => sub {
     return;
 };
 
+sub _append_cache_control {
+    my $directive   = shift;
+    my $dsl         = shift;
+    my $value       = shift;
+    
+    $dsl->header('Cache-Control' =>
+        join ', ',
+            $dsl->header('Cache-Control'),
+            ( defined $value ? join '=', $directive, $value : $directive)
+    );
+    return $dsl->header('Cache-Control')
+;}
+
 on_plugin_import {
     my $dsl = shift;
     my $app = $dsl->app;
