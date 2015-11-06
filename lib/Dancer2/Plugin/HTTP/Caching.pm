@@ -22,13 +22,24 @@ use HTTP::Date;
 
 =head1 SYNOPSIS
 
-Conditionally handling HTTP request based on eTag or Modification-Date,
-according to RFC 7232
+Setting the HTTP response headers 'Expire' and 'Cache-Control' according to
+RFC 7234
 
-HTTP Conditional Requests are used for telling servers that they only have to
-perform the method if the preconditions are met. Such requests are either used
-by caches to (re)validate the cached response with the origin server - or -
-to prevent lost-updates with unsafe-methods in a stateless api (like REST).
+    
+    use Dancer2;
+    use Dancer2::Plugin::HTTP::Caching;
+    
+    get '/aging' => sub {
+        http_cache_max_age          3600; # one hour
+        http_cache_private;
+        http_cache_must_revalidate;
+        http_cache_no_cache         'Set-Cookie';
+        http_cache_no_cache         'WWW-Authenticate';
+        http_expire                 'Thu, 31 Dec 2015 23:23:59 GMT';
+        
+        "This content must be refreshed within 1 Hour\"
+    };
+    
 
 =head1 RFC_7234 HTTP: Caching
 
