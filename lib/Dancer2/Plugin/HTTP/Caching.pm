@@ -43,46 +43,21 @@ RFC 7234
 
 =head1 RFC_7234 HTTP: Caching
 
-Caching is a important mechanism that partially defines the whole HTTP protocol.
+That RFC describes a lot on how to store and respond with cached data. But
+basically, to make caching work it falls in two parts:
 
-For caching there are three different parties involvded.
+1) A origin server that SHOULD provide a expiration-date and or directives that
+tell the cache long it can hold the data. That is basically enough for
+web-server to do, sending off information about freshness.
 
-=over
+2) A caching server that once in a while checks with the origin server what to
+do with it's cached-data, a process called validation. Validation is handled by
+conditional-requests using request headers like 'If-Modified-Since' and when
+not, the server SHOULD send a status of 304 (Not Modified).
 
-=item client
-
-the application that initiates the requests for a specific resource
-
-=item origin server
-
-the server that stores resources, creates them and retrieves them and sends of
-the original representation of the resource, the response
-
-=item cache
-
-a service that sits between the client and the origin server that stores copies
-of responses. There is much to do about cache and the RFC explains in great
-detail how such must operate.
-
-=back
-
-Since this plugin is meant to be used in a Dancer App, it mostlikely will be the
-origin server that this will run. Therfore, this plugin will only implement the
-HTTP Cache-Control response header field as specified in Section 5.2 of the RFC
-- plus the Epire header from Section 5.3.
-
-Since it does not do any caching itself (not yet) it does not need to respond to
-the various Cache-Control directives that can come in from the client (or any
-other intermedium server)
-
-The origin server should only know how to respond to conditional GET request,
-that come from a cache, used to do validation of the cached data. Responding to
-conditional requests is done in a seperate plugin,
-Dancer2::Plugin::HTTP::ConditionalRequest which is follows the RFC 7232.
-
-Date-Last-Modified and eTag are response headers that are related to caching but
-are part of that previously mentioned RFC and are primaraly used for cache
-validation.
+Handling conditional requests by the server is beyond the scope of this caching
+plugin, and is not described as such in the RFC. For this to work, use the
+Dancer2::Plugin::HTTP-ConditionalRequest
 
 Maybe in a future release there might be a option to have a cache run inside the
 Dancer app, but if one wants a cache in the origin server, one could simply use

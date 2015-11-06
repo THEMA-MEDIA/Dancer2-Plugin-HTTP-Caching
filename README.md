@@ -1,6 +1,26 @@
 # Dancer2-Plugin-HTTP-Caching
 A Plugin to set the HTTP-Expires header of the response or any of the Cache-Directives, like max-age
 
+## SYNOPSIS
+Setting the HTTP response headers 'Expire' and 'Cache-Control' according to
+RFC 7234
+
+    
+    use Dancer2;
+    use Dancer2::Plugin::HTTP::Caching;
+    
+    get '/aging' => sub {
+        http_cache_max_age          3600; # one hour
+        http_cache_private;
+        http_cache_must_revalidate;
+        http_cache_no_cache         'Set-Cookie';
+        http_cache_no_cache         'WWW-Authenticate';
+        http_expire                 'Thu, 31 Dec 2015 23:23:59 GMT';
+        
+        "This content must be refreshed within 1 Hour\"
+    };
+    
+
 ## RFC-7234: "Hypertext Transfer Protocol (HTTP/1.1): Caching"
 That RFC describes a lot on how to store and respond with cached data. But basically, to make caching work it falls in two parts:
 
@@ -10,11 +30,9 @@ That RFC describes a lot on how to store and respond with cached data. But basic
 
 Handling conditional requests by the server is beyond the scope of this caching plugin, and is not described as such in the RFC. For this to work, use the Dancer2::Plugin::HTTP-ConditionalRequest
 
-## keywords
+## Dancer2 Keywords
 
 Only the first from the list below has it's own HTTP =response header field, all others, when used, will be appended to the HTTP Cache-Control response header field. Some of those take parameters.
-
-### http_cache_expires
 
 ### http_cache_must_revalidate
 
@@ -36,15 +54,11 @@ Only the first from the list below has it's own HTTP =response header field, all
 
 ### http_cache_s_max_age
 
+### http_cache_expires
+
 See the RFC for a explanation of what these keywords would mean
 
-## The Cache
+## AUTHOR
 
-I might or I might not implement a cache inside this plugin, using before/after hooks.
+Theo van Hoesel, C<< <Th.J.v.Hoesel at THEMA-MEDIA.nl> >>
 
-If I would, it would act like a proper implemented caching server. Store data after a GET (or other responses for different request methods), invalidate data when dealing with unsafe methods (like DELETE or PUT) and validate it's data when asked to do a GET if needed. And naturally, since I also wrote the Dancer2::Plugin::HTTP::ContentNegotiation, it will take the Vary response header filed in consideration.
-
-However... caching could be handled at any other level in process or in the long path of the data being sent. It could be handled with dedicated software, or plugins for specific servers or with plack-middleware too
-
----
-NB. Once more, i can not stress it enough, Date-Last-Modified and eTag are mechanisms for a conditional GET method for revalidating and have nothing to do with Cache-Control directives.
