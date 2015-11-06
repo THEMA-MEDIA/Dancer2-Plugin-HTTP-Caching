@@ -30,7 +30,7 @@ perform the method if the preconditions are met. Such requests are either used
 by caches to (re)validate the cached response with the origin server - or -
 to prevent lost-updates with unsafe-methods in a stateless api (like REST).
 
-=head 1 RFC_7234 HTTP: Caching
+=head1 RFC_7234 HTTP: Caching
 
 Caching is a important mechanism that partially defines the whole HTTP protocol.
 
@@ -100,6 +100,8 @@ register http_cache_must_revalidate => sub {
 
 see RFC 7234: ¤ 5.2.2.2.  no-cache
 
+takes a string, or a list of strings of HTTP-Response Header-fields
+
 =cut
 
 # RFC 7234: ¤ 5.2.2.2.  no-cache
@@ -147,6 +149,8 @@ register http_cache_public => sub {
 =head2 http_cache_private
 
 see RFC 7234: ¤ 5.2.2.6.  private
+
+takes a string, or a list of strings of HTTP-Response Header-fields
 
 =cut
 
