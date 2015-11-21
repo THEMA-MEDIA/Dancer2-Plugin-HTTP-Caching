@@ -7,7 +7,7 @@ use Test::More;
 plan tests => 1;
 
 BEGIN {
-    use_ok( 'Dancer2::Plugin::HTTP::ConditionalRequest' )
+    use_ok( 'Dancer2::Plugin::HTTP::Caching' )
     || print "Bail out!\n";
 }
 
